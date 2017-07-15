@@ -3,6 +3,7 @@ defmodule GameOfLife.Evolution do
 
   def start_link() do
     {:ok, _pid} = GenServer.start_link(__MODULE__, [  ], name: __MODULE__)
+
   end
 
   def step_forward do

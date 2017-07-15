@@ -7,6 +7,7 @@ defmodule GameOfLife.EvolutionTest do
     2 => %{0 => :empty, 1 => :empty, 2 => :empty},
   }
 
+
   describe "Evolution" do
     test "takes a step from empty to empty" do
       GameOfLife.Universe.start_link(@empty_universe)

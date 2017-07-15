@@ -5,7 +5,7 @@ defmodule GameOfLife.Universe do
   end
 
   def get_cells do
-    Agent.get(__MODULE__, &(&1)) 
+    Agent.get(__MODULE__, &(&1))
   end
 
 end
