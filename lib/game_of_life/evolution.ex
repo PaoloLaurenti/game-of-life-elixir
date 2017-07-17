@@ -6,16 +6,16 @@ defmodule GameOfLife.Evolution do
   end
 
   def init([universe_server_pid]) do
-    {:ok, %{universe_pid: universe_server_pid}}
+    universe = GameOfLife.Universe.get(universe_server_pid)
+    {:ok, %{universe_pid: universe_server_pid, universe: universe}}
   end
 
   def step_forward(evolution_server_pid) do
     {:ok, _cells} = GenServer.call(evolution_server_pid, :step_forward)
   end
 
-  def handle_call(:step_forward, _from, %{universe_pid: universe_pid} = state) do
-    cells = GameOfLife.Universe.get_cells(universe_pid)
-    {:reply, {:ok, cells}, state}
+  def handle_call(:step_forward, _from, %{universe: universe} = state) do
+    {:reply, {:ok, universe}, state}
   end
 
 end
