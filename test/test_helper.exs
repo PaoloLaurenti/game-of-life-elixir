@@ -1,2 +1,2 @@
 ExUnit.start()
-Code.require_file "fixtures/evolution.exs", __DIR__
+Code.require_file "fixtures/evolution_fixture.exs", __DIR__

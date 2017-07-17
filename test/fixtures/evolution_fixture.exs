@@ -1,4 +1,4 @@
-defmodule GameOfLife.Fixtures.Evolution do
+defmodule GameOfLife.Fixtures.EvolutionFixture do
 
   @evolutions [
     [
@@ -16,7 +16,7 @@ defmodule GameOfLife.Fixtures.Evolution do
         0 => %{0 => :dead, 1 => :dead, 2 => :dead},
         1 => %{0 => :dead, 1 => :dead, 2 => :dead},
         2 => %{0 => :dead, 1 => :dead, 2 => :dead},
-      },
+      }
     ]
   ]
 

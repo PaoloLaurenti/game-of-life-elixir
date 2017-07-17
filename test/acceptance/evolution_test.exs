@@ -1,26 +1,27 @@
 defmodule GameOfLife.Acceptance.EvolutionTest do
   use ExUnit.Case
+  alias GameOfLife.Fixtures.EvolutionFixture
 
   describe "Evolution" do
     test "takes steps forward" do
-      GameOfLife.Fixtures.Evolution.get_all()
+      EvolutionFixture.get_all()
       |> Enum.each(&assert_evolutions/1)
     end
   end
 
   def assert_evolutions([from | future_steps]) do
-    GameOfLife.Universe.start_link(from)
-    GameOfLife.Evolution.start_link()
+    {:ok, universe_pid} = GameOfLife.Universe.start_link(from)
+    {:ok, evolution_server_pid} = GameOfLife.Evolution.start_link(universe_pid)
 
-    assert_evolution(future_steps)
+    assert_evolution(future_steps, evolution_server_pid)
   end
 
-  def assert_evolution([]), do: nil
-  def assert_evolution([step | future_steps]) do
-    universe_evolved = GameOfLife.Evolution.step_forward
+  def assert_evolution([], _), do: nil
+  def assert_evolution([step | future_steps], evolution_server_pid) do
+    {:ok, evolved_universe} = GameOfLife.Evolution.step_forward(evolution_server_pid)
 
-    assert step === universe_evolved
-    assert_evolution(future_steps)
+    assert step === evolved_universe
+    assert_evolution(future_steps, evolution_server_pid)
   end
 
 end
