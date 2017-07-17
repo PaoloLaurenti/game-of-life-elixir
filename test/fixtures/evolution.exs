@@ -3,19 +3,19 @@ defmodule GameOfLife.Fixtures.Evolution do
   @evolutions [
     [
       %{
-        0 => %{0 => :empty, 1 => :empty, 2 => :empty},
-        1 => %{0 => :empty, 1 => :empty, 2 => :empty},
-        2 => %{0 => :empty, 1 => :empty, 2 => :empty},
+        0 => %{0 => :dead, 1 => :dead, 2 => :dead},
+        1 => %{0 => :dead, 1 => :dead, 2 => :dead},
+        2 => %{0 => :dead, 1 => :dead, 2 => :dead},
       },
       %{
-        0 => %{0 => :empty, 1 => :empty, 2 => :empty},
-        1 => %{0 => :empty, 1 => :empty, 2 => :empty},
-        2 => %{0 => :empty, 1 => :empty, 2 => :empty},
+        0 => %{0 => :dead, 1 => :dead, 2 => :dead},
+        1 => %{0 => :dead, 1 => :dead, 2 => :dead},
+        2 => %{0 => :dead, 1 => :dead, 2 => :dead},
       },
       %{
-        0 => %{0 => :empty, 1 => :empty, 2 => :empty},
-        1 => %{0 => :empty, 1 => :empty, 2 => :empty},
-        2 => %{0 => :empty, 1 => :empty, 2 => :empty},
+        0 => %{0 => :dead, 1 => :dead, 2 => :dead},
+        1 => %{0 => :dead, 1 => :dead, 2 => :dead},
+        2 => %{0 => :dead, 1 => :dead, 2 => :dead},
       },
     ]
   ]
