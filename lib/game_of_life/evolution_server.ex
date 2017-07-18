@@ -1,4 +1,4 @@
-defmodule GameOfLife.Evolution do
+defmodule GameOfLife.EvolutionServer do
   use GenServer
 
   def start_link(universe_pid) do
@@ -6,7 +6,7 @@ defmodule GameOfLife.Evolution do
   end
 
   def init([universe_server_pid]) do
-    universe = GameOfLife.Universe.get(universe_server_pid)
+    universe = GameOfLife.UniverseServer.get(universe_server_pid)
     {:ok, %{universe_pid: universe_server_pid, universe: universe}}
   end
 
@@ -15,7 +15,7 @@ defmodule GameOfLife.Evolution do
   end
 
   def handle_call(:step_forward, _from, %{universe: universe} = state) do
-    {:reply, {:ok, universe}, state}
+    {:reply, {:ok, GameOfLife.Universe.evolve(universe)}, state}
   end
 
 end

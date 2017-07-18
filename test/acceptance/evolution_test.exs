@@ -10,15 +10,15 @@ defmodule GameOfLife.Acceptance.EvolutionTest do
   end
 
   def assert_evolutions([from | future_steps]) do
-    {:ok, universe_pid} = GameOfLife.Universe.start_link(from)
-    {:ok, evolution_server_pid} = GameOfLife.Evolution.start_link(universe_pid)
+    {:ok, universe_pid} = GameOfLife.UniverseServer.start_link(from)
+    {:ok, evolution_server_pid} = GameOfLife.EvolutionServer.start_link(universe_pid)
 
     assert_evolution(future_steps, evolution_server_pid)
   end
 
   def assert_evolution([], _), do: nil
   def assert_evolution([step | future_steps], evolution_server_pid) do
-    {:ok, evolved_universe} = GameOfLife.Evolution.step_forward(evolution_server_pid)
+    {:ok, evolved_universe} = GameOfLife.EvolutionServer.step_forward(evolution_server_pid)
 
     assert step === evolved_universe
     assert_evolution(future_steps, evolution_server_pid)

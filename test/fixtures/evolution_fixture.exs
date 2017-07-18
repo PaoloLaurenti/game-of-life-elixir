@@ -17,6 +17,18 @@ defmodule GameOfLife.Fixtures.EvolutionFixture do
         1 => %{0 => :dead, 1 => :dead, 2 => :dead},
         2 => %{0 => :dead, 1 => :dead, 2 => :dead},
       }
+    ],
+    [
+      %{
+        0 => %{0 => :dead, 1 => :dead, 2 => :dead},
+        1 => %{0 => :dead, 1 => :alive, 2 => :dead},
+        2 => %{0 => :dead, 1 => :dead, 2 => :dead},
+      },
+      %{
+        0 => %{0 => :dead, 1 => :dead, 2 => :dead},
+        1 => %{0 => :dead, 1 => :dead, 2 => :dead},
+        2 => %{0 => :dead, 1 => :dead, 2 => :dead},
+      }
     ]
   ]
 
