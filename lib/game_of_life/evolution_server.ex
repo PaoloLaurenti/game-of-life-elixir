@@ -15,7 +15,8 @@ defmodule GameOfLife.EvolutionServer do
   end
 
   def handle_call(:step_forward, _from, %{universe: universe} = state) do
-    {:reply, {:ok, GameOfLife.Universe.evolve(universe)}, state}
+    evolved_universe = GameOfLife.Universe.evolve(universe)
+    {:reply, {:ok, evolved_universe}, Map.put(state, :universe, evolved_universe)}
   end
 
 end
