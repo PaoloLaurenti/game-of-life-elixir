@@ -4,7 +4,7 @@ defmodule GameOfLife.Universe do
 
   #TODO check universe is a map and well formed
   def evolve(universe) do
-    Enum.reduce(universe, %{}, fn({x, cells}, acc) ->
+    evolved_universe = Enum.reduce(universe, %{}, fn({x, cells}, acc) ->
       evolved_cells = Enum.reduce(cells, %{}, fn({y, cell}, acc_row) ->
         neighbours = get_all_neighbours(universe, {x, y})
         {:ok, evolved_cell} = GameOfLife.Cell.evolve(cell, neighbours)
@@ -12,6 +12,7 @@ defmodule GameOfLife.Universe do
       end)
       Map.put(acc, x, evolved_cells)
     end)
+    {:ok, evolved_universe}
   end
 
   defp get_all_neighbours(universe, cell_coordinate) do

@@ -20,7 +20,7 @@ defmodule GameOfLife.Mixfile do
      mod: {GameOfLife.Application, []}]
   end
 
-  defp elixirc_paths(:test), do: ["lib", "test/fixtures", "test/test_doubles"]
+  defp elixirc_paths(:test), do: ["lib", "test/fixtures"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Dependencies can be Hex packages:
@@ -33,6 +33,9 @@ defmodule GameOfLife.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:mock, "~> 0.2.0", only: :test}]
+    [
+      {:mock, "~> 0.2.0", only: :test},
+      {:benchfella, "~> 0.3.0"}
+    ]
   end
 end
