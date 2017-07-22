@@ -62,4 +62,23 @@ defmodule GameOfLife.Universe do
   defp get_neighbour(universe, {x, y}, :bottom), do: universe[x][y + 1]
   defp get_neighbour(universe, {x, y}, :bottom_right), do: universe[x + 1][y + 1]
 
+  def get_random_one({rows, cols}) do
+    0..(rows - 1)
+    |> Enum.reduce(%{}, fn(row_index, row_acc) ->
+      row = 0..(cols - 1)
+      |> Enum.reduce(%{}, fn(col_index, col_acc) -> Map.put_new(col_acc, col_index, get_random_cell_status()) end)
+
+      Map.put_new(row_acc, row_index, row)
+    end)
+  end
+
+  defp get_random_cell_status do
+    r = :rand.uniform(100)
+    if (rem(r, 2) === 0) do
+      :alive
+    else
+      :dead
+    end
+  end
+
 end
