@@ -1,3 +1,2 @@
-- verify if delegating tasks for each cell evolution produces a faster universe evolution
 - handling evolution server and universe serve crash
 - test and fix universe evolution edge cases like universes not well formed
