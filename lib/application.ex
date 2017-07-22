@@ -1,22 +1,17 @@
 defmodule GameOfLife.Application do
-  # See http://elixir-lang.org/docs/stable/elixir/Application.html
-  # for more information on OTP Applications
-  @moduledoc false
-
   use Application
 
   def start(_type, _args) do
-    import Supervisor.Spec, warn: false
+    import Supervisor.Spec
 
-    # Define workers and child supervisors to be supervised
-    children = [
-      # Starts a worker by calling: GameOfLife.Worker.start_link(arg1, arg2, arg3)
-      # worker(GameOfLife.Worker, [arg1, arg2, arg3]),
-    ]
+    children =
+      [
+        supervisor(Registry, [:unique, GameOfLife.Registry]),
+        GameOfLife.EvolutionServer.child_spec()
+      ]
 
-    # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: GameOfLife.Supervisor]
-    Supervisor.start_link(children, opts)
+    Supervisor.start_link(children, strategy: :rest_for_one)
   end
+
+  def service_name(service_id), do: {:via, Registry, {GameOfLife.Registry, service_id}}
 end

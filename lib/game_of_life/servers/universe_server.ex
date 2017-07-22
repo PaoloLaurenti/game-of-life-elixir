@@ -1,11 +1,13 @@
 defmodule GameOfLife.UniverseServer do
 
-  def start_link(cells) do
-    {:ok, _pid} = Agent.start_link(fn() -> cells end)
+  def start_link(game_id, cells) do
+    {:ok, _pid} = Agent.start_link(fn() -> cells end, name: service_name(game_id))
   end
 
-  def get(universe_pid) do
-    Agent.get(universe_pid, &(&1))
+  def get(game_id) do
+    Agent.get(service_name(game_id), &(&1))
   end
+
+  defp service_name(game_id), do: GameOfLife.Application.service_name({__MODULE__, game_id})
 
 end
