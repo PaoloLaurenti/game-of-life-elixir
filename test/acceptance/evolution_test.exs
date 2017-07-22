@@ -22,7 +22,7 @@ defmodule GameOfLife.Acceptance.EvolutionTest do
   defp assert_evolution([step | future_steps], evolution_server_pid) do
     {:ok, evolved_universe} = GameOfLife.EvolutionServer.step_forward(evolution_server_pid)
 
-    assert step === evolved_universe
+    assert evolved_universe === step
     assert_evolution(future_steps, evolution_server_pid)
   end
 
