@@ -37,4 +37,6 @@ defmodule GameOfLife.Fixtures.EvolutionFixture do
 
   def get_all, do: @evolutions
 
+  def get_simple_evolution, do: Enum.at(@evolutions, 1)
+
 end

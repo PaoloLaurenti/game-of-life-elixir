@@ -8,6 +8,10 @@ defmodule GameOfLife.UniverseServer do
     Agent.get(service_name(game_id), &(&1))
   end
 
+  def set(game_id, universe) do
+    Agent.update(service_name(game_id), fn(_) -> universe end)
+  end
+
   defp service_name(game_id), do: GameOfLife.Application.service_name({__MODULE__, game_id})
 
 end

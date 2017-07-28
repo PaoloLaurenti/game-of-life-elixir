@@ -27,7 +27,7 @@ defmodule GameOfLife.EvolutionServer do
         worker(GameOfLife.UniverseServer, [game_id, universe]),
         worker(__MODULE__, [game_id])
       ],
-      strategy: :one_for_all
+      strategy: :one_for_one
     )
   end
 
@@ -44,8 +44,9 @@ defmodule GameOfLife.EvolutionServer do
     {:ok, _cells} = GenServer.call(service_name(game_id), :step_forward)
   end
 
-  def handle_call(:step_forward, _from, %{universe: universe} = state) do
+  def handle_call(:step_forward, _from, %{game_id: game_id, universe: universe} = state) do
     {:ok, evolved_universe} = GameOfLife.Universe.evolve(universe)
+    :ok = GameOfLife.UniverseServer.set(game_id, evolved_universe)
     {:reply, {:ok, evolved_universe}, %{state | universe: evolved_universe}}
   end
 
