@@ -6,13 +6,13 @@ defmodule GameOfLife.Acceptance.EvolutionTest do
   describe "Evolution" do
     test "takes steps forward" do
       EvolutionFixture.get_all()
-      |> Enum.each(fn(e) -> assert_evolutions(:erlang.unique_integer(), e) end)
+      |> Enum.each(fn(e) -> assert_evolutions(:rand.uniform(1_000_000_000), e) end)
     end
   end
 
   describe "Resilience configuration" do
     test "allows evolution to start again from the evolution step where it's crashed" do
-      game_id = 1
+      game_id = :rand.uniform(1_000_000_000)
       [from | [first_step | [second_step | []]]] = EvolutionFixture.get_simple_evolution()
       {:ok, _} = EvolutionServer.start(game_id, from)
       {:ok, ^first_step} = EvolutionServer.step_forward(game_id)
@@ -21,6 +21,20 @@ defmodule GameOfLife.Acceptance.EvolutionTest do
       |> Process.exit(:kill)
       wait_until(fn() -> look_up_pid(GameOfLife.EvolutionServer, game_id) === nil end)
       wait_until(fn() -> look_up_pid(GameOfLife.EvolutionServer, game_id) !== nil end)
+
+      assert_evolution(game_id, second_step)
+    end
+
+    test "allows to continue evolution even when universe server has crashed" do
+      game_id = :rand.uniform(1_000_000_000)
+      [from | [first_step | [second_step | []]]] = EvolutionFixture.get_simple_evolution()
+      {:ok, _} = EvolutionServer.start(game_id, from)
+      {:ok, ^first_step} = EvolutionServer.step_forward(game_id)
+
+      look_up_pid(GameOfLife.UniverseServer, game_id)
+      |> Process.exit(:kill)
+      wait_until(fn() -> look_up_pid(GameOfLife.UniverseServer, game_id) === nil end)
+      wait_until(fn() -> look_up_pid(GameOfLife.UniverseServer, game_id) !== nil end)
 
       assert_evolution(game_id, second_step)
     end

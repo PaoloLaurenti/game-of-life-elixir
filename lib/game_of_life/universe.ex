@@ -21,29 +21,6 @@ defmodule GameOfLife.Universe do
     end
   end
 
-  # defp pmap(universe, callback) do
-  #   # for y <- Map.keys(universe), into: %{} do
-  #   #   mapped_cells = for x <- Map.keys(universe[y]), into: %{} do
-  #   #     {x, Task.async(fn() -> callback.(x, y, universe[y][x]) end)}
-  #   #   end
-  #   #   {y, mapped_cells |> Enum.map(fn({x, t}) -> {x, Task.await(t)} end) |> Enum.into(%{})}
-  #   # end
-  #
-  #   # universe
-  #   # |> Enum.map(fn({y, cells}) ->
-  #   #   mapped_cells = cells
-  #   #   |> Enum.chunk(128, 128, [])
-  #   #   |> Enum.flat_map(fn(chunk) ->
-  #   #     chunk
-  #   #     |> Enum.map(fn({x, cell}) -> {x, Task.async(fn -> callback.(x, y, cell) end)} end)
-  #   #     |> Enum.map(fn({x, task}) -> {x, Task.await(task)} end)
-  #   #   end)
-  #   #   |> Enum.into(%{})
-  #   #   {y, mapped_cells}
-  #   # end)
-  #   # |> Enum.into(%{})
-  # end
-
   defp get_all_neighbours(universe, cell_coordinate) do
     Enum.reduce(@neighbours_places, [], fn(p, n_acc) ->
       case get_neighbour(universe, cell_coordinate, p) do
