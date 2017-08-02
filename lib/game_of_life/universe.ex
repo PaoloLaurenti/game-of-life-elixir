@@ -2,7 +2,6 @@ defmodule GameOfLife.Universe do
   @neighbours_places [:top_left, :top, :top_right, :left, :right, :bottom_left, :bottom, :bottom_right]
   @valid_cells_values [:dead, :alive]
 
-  #TODO check universe is a map and well formed
   def evolve(universe) do
     case check(universe) do
       :ok -> evolve_safe(universe)
@@ -16,10 +15,19 @@ defmodule GameOfLife.Universe do
     {check_values_response, invalid_cells} = check_values(universe)
     cond do
       universe === %{} -> :universe_empty
+      !has_ordered_indexes?(universe) -> :universe_has_not_ordered_indexes
       !is_well_formed?(universe) -> :universe_is_not_well_formed
       check_values_response === :not_valid -> {:universe_contains_unrecognized_values, invalid_cells}
       true -> :ok
     end
+  end
+
+  defp has_ordered_indexes?(universe) do
+    cols_ixs = Map.keys(universe) |> Enum.sort
+    cols_ixs === Enum.to_list(0..(Enum.count(universe) - 1))
+      && Enum.all?(universe, fn({_, rows}) ->
+        Enum.sort(Map.keys(rows)) === Enum.to_list(0 ..(Enum.count(rows) - 1))
+      end)
   end
 
   defp is_well_formed?(universe), do:

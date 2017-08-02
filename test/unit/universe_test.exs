@@ -59,6 +59,16 @@ defmodule GameOfLife.Unit.UniverseTest do
       assert result == {:error, :universe_empty}
     end
 
+    test "returns error when evolving if the given universe has not ordered indexes" do
+      result1 = GameOfLife.Universe.evolve(%{0 => %{0 => :dead, 1 => :alive, 2 => :alive},
+                                            3 => %{0 => :alive, 1 => :alive, 2 => :dead}})
+      result2 = GameOfLife.Universe.evolve(%{0 => %{0 => :alive, 1 => :alive, 2 => :alive},
+                                            1 => %{0 => :dead, 4 => :alive, 2 => :dead}})
+
+      assert result1 == {:error, :universe_has_not_ordered_indexes}
+      assert result2 == {:error, :universe_has_not_ordered_indexes}
+    end
+
     defp assert_cell_evolution_call(call) do
       try do
         assert called GameOfLife.Cell.evolve(call.cell, call.neighbours)
