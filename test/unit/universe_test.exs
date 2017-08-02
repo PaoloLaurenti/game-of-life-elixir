@@ -39,10 +39,18 @@ defmodule GameOfLife.Unit.UniverseTest do
        assert result == {:error, :universe_is_not_a_map}
     end
 
-    test "return error when evolving if the given universe is not well formed" do
-        result = GameOfLife.Universe.evolve(%{0 => %{0 => :dead, 1 => :dead, 2 => :alive}, 1 => %{0 => :dead, 1 => :alive}})
+    test "returns error when evolving if the given universe is not well formed" do
+        result = GameOfLife.Universe.evolve(%{0 => %{0 => :dead, 1 => :dead, 2 => :alive},
+                                              1 => %{0 => :dead, 1 => :alive}})
 
         assert result == {:error, :universe_is_not_well_formed}
+    end
+
+    test "returns error when evolving if the given universe contains unrecognized values" do
+      result = GameOfLife.Universe.evolve(%{0 => %{0 => :YYY, 1 => :alive, 2 => :alive},
+                                            1 => %{0 => :XXX, 1 => :alive, 2 => :dead}})
+
+      assert result == {:error, :universe_contains_unrecognized_values, [{0, 0, :YYY}, {1, 0, :XXX}]}
     end
 
     defp assert_cell_evolution_call(call) do

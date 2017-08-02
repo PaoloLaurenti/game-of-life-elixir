@@ -1,22 +1,44 @@
 defmodule GameOfLife.Universe do
   @neighbours_places [:top_left, :top, :top_right, :left, :right, :bottom_left, :bottom, :bottom_right]
+  @valid_cells_values [:dead, :alive]
 
   #TODO check universe is a map and well formed
   def evolve(universe) do
     case check(universe) do
       :ok -> evolve_safe(universe)
+      {error, extra_info} -> {:error, error, extra_info}
       error -> {:error, error}
     end
   end
 
   defp check(universe) when is_map(universe) === false, do: :universe_is_not_a_map
   defp check(universe) do
+    {check_values_response, invalid_cells} = check_values(universe)
     cond do
-      !Enum.all?(universe, fn({_, row}) -> Enum.count(row) === Enum.count(universe[0]) end) ->
-         :universe_is_not_well_formed
+      !is_well_formed?(universe) -> :universe_is_not_well_formed
+      check_values_response === :not_valid -> {:universe_contains_unrecognized_values, invalid_cells}
       true -> :ok
     end
   end
+
+  defp is_well_formed?(universe), do:
+    Enum.all?(universe, fn({_, row}) -> Enum.count(row) === Enum.count(universe[0]) end)
+
+  defp check_values(universe) do
+    invalid_cells = for y <- Map.keys(universe), x <- Map.keys(universe[y]), into: [] do
+      value = get_in(universe, [y, x])
+      if !is_a_valid_cell_value?(value), do: {y, x, value}
+    end
+    |> Enum.filter(&(&1 !== nil))
+
+    if(invalid_cells === []) do
+      {:ok, []}
+    else
+      {:not_valid, invalid_cells}
+    end
+  end
+
+  defp is_a_valid_cell_value?(value), do: Enum.member?(@valid_cells_values, value)
 
   defp evolve_safe(universe) do
     evolved_universe = map(universe, fn(x, y, cell) ->
