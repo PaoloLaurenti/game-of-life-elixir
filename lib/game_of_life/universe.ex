@@ -15,6 +15,7 @@ defmodule GameOfLife.Universe do
   defp check(universe) do
     {check_values_response, invalid_cells} = check_values(universe)
     cond do
+      universe === %{} -> :universe_empty
       !is_well_formed?(universe) -> :universe_is_not_well_formed
       check_values_response === :not_valid -> {:universe_contains_unrecognized_values, invalid_cells}
       true -> :ok

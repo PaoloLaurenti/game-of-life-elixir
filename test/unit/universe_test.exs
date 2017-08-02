@@ -53,6 +53,12 @@ defmodule GameOfLife.Unit.UniverseTest do
       assert result == {:error, :universe_contains_unrecognized_values, [{0, 0, :YYY}, {1, 0, :XXX}]}
     end
 
+    test "returns error when evolving if the given universe is empty" do
+      result = GameOfLife.Universe.evolve(%{})
+
+      assert result == {:error, :universe_empty}
+    end
+
     defp assert_cell_evolution_call(call) do
       try do
         assert called GameOfLife.Cell.evolve(call.cell, call.neighbours)
