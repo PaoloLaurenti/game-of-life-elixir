@@ -3,7 +3,7 @@ defmodule GameOfLife.Universe do
   @neighbours_places [:top_left, :top, :top_right, :left, :right, :bottom_left, :bottom, :bottom_right]
 
   #TODO check universe is a map and well formed
-  def evolve(universe) do
+  def evolve(universe) when is_map(universe) do
     evolved_universe = map(universe, fn(x, y, cell) ->
       neighbours = get_all_neighbours(universe, {y, x})
       {:ok, evolved_cell} = GameOfLife.Cell.evolve(cell, neighbours)
@@ -11,6 +11,7 @@ defmodule GameOfLife.Universe do
     end)
     {:ok, evolved_universe}
   end
+  def evolve(_), do: {:error, :universe_is_not_a_map}
 
   defp map(universe, callback) do
     for y <- Map.keys(universe), into: %{} do

@@ -33,6 +33,12 @@ defmodule GameOfLife.Unit.UniverseTest do
       end
     end
 
+    test "returns error if the given universe is a map" do
+       result = GameOfLife.Universe.evolve({})
+
+       assert result == {:error, :universe_is_not_a_map}
+    end
+
     defp assert_cell_evolution_call(call) do
       try do
         assert called GameOfLife.Cell.evolve(call.cell, call.neighbours)
