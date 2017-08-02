@@ -1,9 +1,24 @@
 defmodule GameOfLife.Universe do
-
   @neighbours_places [:top_left, :top, :top_right, :left, :right, :bottom_left, :bottom, :bottom_right]
 
   #TODO check universe is a map and well formed
-  def evolve(universe) when is_map(universe) do
+  def evolve(universe) do
+    case check(universe) do
+      :ok -> evolve_safe(universe)
+      error -> {:error, error}
+    end
+  end
+
+  defp check(universe) when is_map(universe) === false, do: :universe_is_not_a_map
+  defp check(universe) do
+    cond do
+      !Enum.all?(universe, fn({_, row}) -> Enum.count(row) === Enum.count(universe[0]) end) ->
+         :universe_is_not_well_formed
+      true -> :ok
+    end
+  end
+
+  defp evolve_safe(universe) do
     evolved_universe = map(universe, fn(x, y, cell) ->
       neighbours = get_all_neighbours(universe, {y, x})
       {:ok, evolved_cell} = GameOfLife.Cell.evolve(cell, neighbours)
@@ -11,7 +26,6 @@ defmodule GameOfLife.Universe do
     end)
     {:ok, evolved_universe}
   end
-  def evolve(_), do: {:error, :universe_is_not_a_map}
 
   defp map(universe, callback) do
     for y <- Map.keys(universe), into: %{} do
