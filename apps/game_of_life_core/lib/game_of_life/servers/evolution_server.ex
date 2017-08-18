@@ -1,8 +1,8 @@
-defmodule GameOfLife.EvolutionServer do
+defmodule GameOfLifeCore.EvolutionServer do
   use GenServer
   import Supervisor.Spec
 
-  @evolution_supervisor GameOfLife.EvolutionSup
+  @evolution_supervisor GameOfLifeCore.EvolutionSup
 
   def child_spec(),
     do:
@@ -15,7 +15,7 @@ defmodule GameOfLife.EvolutionServer do
         id: @evolution_supervisor)
 
   def start(game_id, universe_size) when is_tuple(universe_size) do
-     start(game_id, GameOfLife.Universe.get_random_one(universe_size))
+     start(game_id, GameOfLifeCore.Universe.get_random_one(universe_size))
   end
   def start(game_id, universe) do
     Supervisor.start_child(@evolution_supervisor, [game_id, universe])
@@ -24,7 +24,7 @@ defmodule GameOfLife.EvolutionServer do
   def start_supervisor(game_id, universe) do
     Supervisor.start_link(
       [
-        worker(GameOfLife.UniverseServer, [game_id, universe]),
+        worker(GameOfLifeCore.UniverseServer, [game_id, universe]),
         worker(__MODULE__, [game_id])
       ],
       strategy: :one_for_one
@@ -36,7 +36,7 @@ defmodule GameOfLife.EvolutionServer do
   end
 
   def init([game_id]) do
-    universe = GameOfLife.UniverseServer.get(game_id)
+    universe = GameOfLifeCore.UniverseServer.get(game_id)
     {:ok, %{game_id: game_id, universe: universe}}
   end
 
@@ -45,11 +45,11 @@ defmodule GameOfLife.EvolutionServer do
   end
 
   def handle_call(:step_forward, _from, %{game_id: game_id, universe: universe} = state) do
-    {:ok, evolved_universe} = GameOfLife.Universe.evolve(universe)
-    GameOfLife.UniverseServer.set(game_id, evolved_universe)
+    {:ok, evolved_universe} = GameOfLifeCore.Universe.evolve(universe)
+    GameOfLifeCore.UniverseServer.set(game_id, evolved_universe)
     {:reply, {:ok, evolved_universe}, %{state | universe: evolved_universe}}
   end
 
-  defp service_name(game_id), do: GameOfLife.Application.service_name({__MODULE__, game_id})
+  defp service_name(game_id), do: GameOfLifeCore.Application.service_name({__MODULE__, game_id})
 
 end

@@ -1,3 +1,3 @@
-%{"benchfella": {:hex, :benchfella, "0.3.4", "41d2c017b361ece5225b5ba2e3b30ae53578c57c6ebc434417b4f1c2c94cf4f3", [:mix], [], "hexpm"},
+%{"benchfella": {:hex, :benchfella, "0.3.5", "b2122c234117b3f91ed7b43b6e915e19e1ab216971154acd0a80ce0e9b8c05f5", [:mix], [], "hexpm"},
   "meck": {:hex, :meck, "0.8.7", "ebad16ca23f685b07aed3bc011efff65fbaf28881a8adf925428ef5472d390ee", [:rebar3], [], "hexpm"},
   "mock": {:hex, :mock, "0.2.1", "bfdba786903e77f9c18772dee472d020ceb8ef000783e737725a4c8f54ad28ec", [:mix], [{:meck, "~> 0.8.2", [hex: :meck, repo: "hexpm", optional: false]}], "hexpm"}}

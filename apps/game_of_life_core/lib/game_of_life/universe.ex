@@ -1,4 +1,4 @@
-defmodule GameOfLife.Universe do
+defmodule GameOfLifeCore.Universe do
   @neighbours_places [:top_left, :top, :top_right, :left, :right, :bottom_left, :bottom, :bottom_right]
   @valid_cells_values [:dead, :alive]
 
@@ -52,7 +52,7 @@ defmodule GameOfLife.Universe do
   defp evolve_safe(universe) do
     evolved_universe = map(universe, fn(x, y, cell) ->
       neighbours = get_all_neighbours(universe, {y, x})
-      {:ok, evolved_cell} = GameOfLife.Cell.evolve(cell, neighbours)
+      {:ok, evolved_cell} = GameOfLifeCore.Cell.evolve(cell, neighbours)
       evolved_cell
     end)
     {:ok, evolved_universe}

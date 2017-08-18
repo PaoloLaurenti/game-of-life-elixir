@@ -1,7 +1,8 @@
-defmodule GameOfLife.Acceptance.EvolutionTest do
+defmodule GameOfLifeCore.Acceptance.EvolutionTest do
   use ExUnit.Case
-  alias GameOfLife.Fixtures.EvolutionFixture
-  alias GameOfLife.EvolutionServer
+  alias GameOfLifeCore.Fixtures.EvolutionFixture
+  alias GameOfLifeCore.EvolutionServer
+  alias GameOfLifeCore.UniverseServer
 
   describe "Evolution" do
     test "takes steps forward" do
@@ -17,10 +18,10 @@ defmodule GameOfLife.Acceptance.EvolutionTest do
       {:ok, _} = EvolutionServer.start(game_id, from)
       {:ok, ^first_step} = EvolutionServer.step_forward(game_id)
 
-      look_up_pid(GameOfLife.EvolutionServer, game_id)
+      look_up_pid(EvolutionServer, game_id)
       |> Process.exit(:kill)
-      wait_until(fn() -> look_up_pid(GameOfLife.EvolutionServer, game_id) === nil end)
-      wait_until(fn() -> look_up_pid(GameOfLife.EvolutionServer, game_id) !== nil end)
+      wait_until(fn() -> look_up_pid(EvolutionServer, game_id) === nil end)
+      wait_until(fn() -> look_up_pid(EvolutionServer, game_id) !== nil end)
 
       assert_evolution(game_id, second_step)
     end
@@ -31,10 +32,10 @@ defmodule GameOfLife.Acceptance.EvolutionTest do
       {:ok, _} = EvolutionServer.start(game_id, from)
       {:ok, ^first_step} = EvolutionServer.step_forward(game_id)
 
-      look_up_pid(GameOfLife.UniverseServer, game_id)
+      look_up_pid(UniverseServer, game_id)
       |> Process.exit(:kill)
-      wait_until(fn() -> look_up_pid(GameOfLife.UniverseServer, game_id) === nil end)
-      wait_until(fn() -> look_up_pid(GameOfLife.UniverseServer, game_id) !== nil end)
+      wait_until(fn() -> look_up_pid(UniverseServer, game_id) === nil end)
+      wait_until(fn() -> look_up_pid(UniverseServer, game_id) !== nil end)
 
       assert_evolution(game_id, second_step)
     end
@@ -52,7 +53,7 @@ defmodule GameOfLife.Acceptance.EvolutionTest do
   end
 
   defp look_up_pid(module, game_id) do
-    case Registry.lookup(GameOfLife.Registry, {module, game_id}) do
+    case Registry.lookup(GameOfLifeCore.Registry, {module, game_id}) do
        [{pid, _}] -> pid
        [] -> nil
        _ -> raise("Error looking up pif for #{IO.inspect(module)} - #{IO.inspect(game_id)}")

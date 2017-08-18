@@ -1,4 +1,4 @@
-defmodule GameOfLife.Fixtures.EvolutionFixture do
+defmodule GameOfLifeCore.Fixtures.EvolutionFixture do
 
   @evolutions [
     [

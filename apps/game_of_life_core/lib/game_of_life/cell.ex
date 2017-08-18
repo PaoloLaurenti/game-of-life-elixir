@@ -1,4 +1,4 @@
-defmodule GameOfLife.Cell do
+defmodule GameOfLifeCore.Cell do
 
   def evolve(cell, neighbours) do
     live_neighbours_count = Enum.filter(neighbours, &(&1 === :alive)) |> length
